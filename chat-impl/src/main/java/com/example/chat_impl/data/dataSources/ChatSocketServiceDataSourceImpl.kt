@@ -58,7 +58,7 @@ class ChatSocketServiceDataSourceImpl(
 
     override fun observeMessages(): Flow<Result<Message, DataError.Network>> =
         chatSocketService.observeMessages()
-            .map { message -> Result.Success(message) }
+            .map { message -> Result.Success(message) as Result<Message, DataError.Network>}
             .catch { e ->
                 emit(
                     when (e) {
@@ -78,6 +78,7 @@ class ChatSocketServiceDataSourceImpl(
                     }
                 )
             }
+
 
     override suspend fun cancelConnection(): Result<Unit, DataError.Network> =
         try {

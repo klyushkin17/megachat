@@ -49,7 +49,7 @@ class ChatSocketServiceRepositoryImpl(
         }
     }
 
-    override suspend fun stopConnection(): Result<Unit, RootError> {
+    override suspend fun stopConnection(): Result<Unit, ChatUiErrors> {
         val stopResult = chatSocketServiceDataSource.cancelConnection()
 
         return when(stopResult) {
@@ -65,7 +65,7 @@ class ChatSocketServiceRepositoryImpl(
         }
     }
 
-    override suspend fun sendMessage(message: String): Result<Unit, RootError> {
+    override suspend fun sendMessage(message: String): Result<Unit, ChatUiErrors> {
         val sendMessageResult = chatSocketServiceDataSource.sendMessage(message)
 
         return when(sendMessageResult) {

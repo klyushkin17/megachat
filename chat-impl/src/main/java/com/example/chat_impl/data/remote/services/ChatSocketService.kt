@@ -1,6 +1,6 @@
 package com.example.chat_impl.data.remote.services
 
-import com.example.chat_impl.domain.Message
+import com.example.chat_impl.domain.model.Message
 import com.example.core.network.Result
 import com.example.core.network.RootError
 import kotlinx.coroutines.flow.Flow

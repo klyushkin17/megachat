@@ -1,6 +1,6 @@
 package com.example.chat_impl.data.remote.models
 
-import com.example.chat_impl.domain.Message
+import com.example.chat_impl.domain.model.Message
 import com.squareup.moshi.Json
 import kotlinx.serialization.Serializable
 

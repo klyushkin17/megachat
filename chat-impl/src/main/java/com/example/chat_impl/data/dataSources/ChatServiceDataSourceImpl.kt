@@ -1,7 +1,7 @@
 package com.example.chat_impl.data.dataSources
 
 import com.example.chat_impl.data.remote.services.ChatService
-import com.example.chat_impl.domain.Message
+import com.example.chat_impl.domain.model.Message
 import com.example.core.errors.DataError
 import com.example.core.network.Result
 import kotlinx.serialization.SerializationException

@@ -7,17 +7,22 @@ import com.example.chat_impl.presentation.errors.ChatUiErrors
 import com.example.chat_impl.presentation.model.MessageUi
 import com.example.core.errors.DataError
 import com.example.core.network.Result
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 
 class ChatSocketServiceRepositoryImpl(
-    private val chatSocketServiceDataSource: ChatSocketServiceDataSource
+    private val chatSocketServiceDataSource: ChatSocketServiceDataSource,
 ): ChatSocketServiceRepository {
+
     override suspend fun startConnection(
         authToken: String
     ): Flow<Result<MessageUi, ChatUiErrors>> {
         val connectionResult = chatSocketServiceDataSource.initConnection(authToken)
+
         return when(connectionResult) {
             is Result.Success -> {
                 chatSocketServiceDataSource.observeMessages()
@@ -66,7 +71,7 @@ class ChatSocketServiceRepositoryImpl(
     }
 
     override suspend fun sendMessage(message: String): Result<Unit, ChatUiErrors> {
-        val sendMessageResult = chatSocketServiceDataSource.sendMessage(Message)
+        val sendMessageResult = chatSocketServiceDataSource.sendMessage(message)
 
         return when(sendMessageResult) {
             is Result.Success -> { Result.Success(Unit) }

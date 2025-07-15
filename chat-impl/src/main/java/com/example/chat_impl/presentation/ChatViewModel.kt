@@ -1,7 +1,6 @@
 package com.example.chat_impl.presentation
 
 import android.util.Log
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.chat_impl.domain.useCases.GetMessagesUseCase
@@ -9,8 +8,10 @@ import com.example.chat_impl.domain.useCases.SendMessageUseCase
 import com.example.chat_impl.domain.useCases.StartConnectionUseCase
 import com.example.chat_impl.domain.useCases.StopConnectionUseCase
 import com.example.chat_impl.presentation.errors.ChatUiErrors
-import com.example.chat_impl.presentation.model.MessageUi
 import com.example.core.network.Result
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -23,27 +24,58 @@ class ChatViewModel(
     private val getMessagesUC: GetMessagesUseCase,
     private val startConnectionUC: StartConnectionUseCase,
     private val stopConnectionUC: StopConnectionUseCase,
+    private val backgroundTaskDispatcher: CoroutineDispatcher = Dispatchers.IO
 ): ViewModel() {
+
+    private val backgroundCoroutineContext = backgroundTaskDispatcher + SupervisorJob()
 
     private val _chatState = MutableStateFlow(ChatState())
     val chatState = _chatState.asStateFlow()
 
-    private val _messageListState = MutableStateFlow<List<MessageUi>>(emptyList())
-    val messageListState = _messageListState.asStateFlow()
+    private val _messageTextFieldState = MutableStateFlow("")
+    val messageTextFieldState = _messageTextFieldState.asStateFlow()
 
     init {
         getMessages()
+        startConnection()
     }
 
     fun onAction(action: ChatActions) =
         when(action) {
             is ChatActions.OnLeaveChat -> stopConnections()
             is ChatActions.OnMessageSend -> sendMessage(action.message)
-            is ChatActions.OnMessageChange -> // TODO
+            is ChatActions.OnMessageChange -> onMessageChange(action.message)
         }
 
+    private fun startConnection() {
+        viewModelScope.launch(backgroundCoroutineContext) {
+            startConnectionUC("DUMMY_AUTH_KAY")
+                .collect{ messageResult ->
+                    when (messageResult) {
+                        is Result.Success -> {
+                            val newMessage = messageResult.data
+                            _chatState.update {
+                                chatState.value.copy(
+                                    messagesList = chatState.value.messagesList + newMessage
+                                )
+                            }
+                        }
+
+                        is Result.Error -> {
+                            if (messageResult.error == ChatUiErrors.NO_INTERNET_CONNECTION) {
+                                _chatState.update {
+                                    chatState.value.copy(error = ChatError.NoInternetConnection)
+                                }
+                            }
+                        }
+                    }
+
+                }
+        }
+    }
+
     private fun stopConnections() {
-        viewModelScope.launch {
+        viewModelScope.launch(backgroundCoroutineContext) {
             val stoppingResult = stopConnectionUC()
 
             when(stoppingResult) {
@@ -54,7 +86,7 @@ class ChatViewModel(
     }
 
     private fun sendMessage(message: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(backgroundCoroutineContext) {
             val sendingResult = sendMessageUC(message)
 
             when(sendingResult) {
@@ -71,18 +103,24 @@ class ChatViewModel(
 
     private fun getMessages() {
         viewModelScope.launch {
+            startLoading()
+
             val messagesListResult = getMessagesUC()
 
             when(messagesListResult) {
                 is Result.Success -> {
-                    _messageListState.update { messagesListResult.data }
+                    _chatState.update {
+                        chatState.value.copy( messagesList = messagesListResult.data )
+                    }
 
                     if (chatState.value.error == ChatError.NoInternetConnection) {
                         _chatState.update { chatState.value.copy(error = ChatError.None) }
                     }
                 }
-                is Result.Error -> sendingResult.error.handleErrors()
+                is Result.Error -> messagesListResult.error.handleErrors()
             }
+
+            stopLoading()
         }
     }
 
@@ -99,4 +137,14 @@ class ChatViewModel(
             }
         }
     }
+
+    private fun onMessageChange(message: String) {
+        _messageTextFieldState.update { message }
+    }
+
+    private fun startLoading() =
+        _chatState.update { chatState.value.copy(isLoading = true) }
+
+    private fun stopLoading() =
+        _chatState.update { chatState.value.copy(isLoading = false) }
 }

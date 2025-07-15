@@ -1,16 +1,94 @@
 package com.example.chat_impl.di
 
-import com.squareup.moshi.JsonReader
+import com.example.chat_impl.data.dataSources.ChatServiceDataSource
+import com.example.chat_impl.data.dataSources.ChatServiceDataSourceImpl
+import com.example.chat_impl.data.dataSources.ChatSocketServiceDataSource
+import com.example.chat_impl.data.remote.services.ChatService
+import com.example.chat_impl.data.remote.services.ChatSocketService
+import com.example.chat_impl.data.remote.services.ChatSocketServiceImpl
+import com.example.chat_impl.data.repository.ChatServiceRepositoryImpl
+import com.example.chat_impl.domain.repository.ChatServiceRepository
+import com.example.chat_impl.domain.useCases.GetMessagesUseCase
+import com.example.chat_impl.domain.useCases.GetMessagesUseCaseImpl
+import com.example.chat_impl.domain.useCases.SendMessageUseCase
+import com.example.chat_impl.domain.useCases.SendMessageUseCaseImpl
+import com.example.chat_impl.domain.useCases.StartConnectionUseCase
+import com.example.chat_impl.domain.useCases.StartConnectionUseCaseImpl
+import com.example.chat_impl.domain.useCases.StopConnectionUseCase
+import com.example.chat_impl.domain.useCases.StopConnectionUseCaseImpl
+import com.example.core.network.BaseUrl
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.cio.CIO
-import io.ktor.client.plugins.logging.Logging
-import io.ktor.client.plugins.websocket.WebSockets
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+
+@Module(includes = [
+    RetrofitModule::class,
+    BindingModule::class,
+    ViewModelModule::class,
+])
+interface ChatModule
 
 @Module
-object ChatModule {
+object RetrofitModule {
 
+    @ChatScope
+    @Provides
+    fun provideChatService(
+        chatServiceRetrofit: Retrofit
+    ): ChatService {
+        return chatServiceRetrofit.newBuilder()
+            .baseUrl(BaseUrl.CHAT_BASE_URL.baseUrl)
+            .build()
+            .create(ChatService::class.java)
+    }
+}
+
+@Module
+object ViewModelModule {
+
+}
+
+@Module
+interface BindingModule {
+
+    @Binds
+    fun bindsChatSocketService(
+        chatSocketServiceImpl: ChatSocketServiceImpl
+    ): ChatSocketService
+
+    @Binds
+    fun bindsChatServiceDataSource(
+        chatServiceDataSourceImpl: ChatServiceDataSourceImpl
+    ): ChatServiceDataSource
+
+    @Binds
+    fun bindsChatSocketServiceDataSource(
+        chatSocketServiceDataSourceImpl: ChatSocketServiceDataSource
+    ): ChatSocketServiceDataSource
+
+    @Binds
+    fun bindsChatServiceRepository(
+        chatServiceRepositoryImpl: ChatServiceRepositoryImpl
+    ): ChatServiceRepository
+
+    @Binds
+    fun bindsGetMessagesUseCase(
+        getMessageUseCaseImpl: GetMessagesUseCaseImpl
+    ): GetMessagesUseCase
+
+    @Binds
+    fun bindsSendMessageUseCase(
+        sendMessageUseCaseImpl: SendMessageUseCaseImpl
+    ): SendMessageUseCase
+
+    @Binds
+    fun bindStartConnectionUseCase(
+        startConnectionUseCaseImpl: StartConnectionUseCaseImpl
+    ): StartConnectionUseCase
+
+    @Binds
+    fun bindStopConnectionUseCase(
+        stopConnectionUseCaseImpl: StopConnectionUseCaseImpl
+    ): StopConnectionUseCase
 }

@@ -13,8 +13,9 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class ChatSocketServiceRepositoryImpl(
+class ChatSocketServiceRepositoryImpl @Inject constructor(
     private val chatSocketServiceDataSource: ChatSocketServiceDataSource,
 ): ChatSocketServiceRepository {
 

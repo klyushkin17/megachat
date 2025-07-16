@@ -15,8 +15,9 @@ import kotlinx.coroutines.isActive
 import com.example.chat_impl.utils.toMessage
 import io.ktor.websocket.close
 import kotlinx.coroutines.flow.emptyFlow
+import javax.inject.Inject
 
-class ChatSocketServiceImpl(
+class ChatSocketServiceImpl @Inject constructor(
     val httpClient: HttpClient
 ): ChatSocketService {
 

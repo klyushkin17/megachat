@@ -44,6 +44,7 @@ android {
 
 dependencies {
     implementation(project(":core"))
+    implementation(project(":chat-api"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -76,9 +77,12 @@ dependencies {
     implementation(libs.logback.classic)
 
     // Dagger2
-    implementation("com.google.dagger:dagger:2.48")
-    kapt("com.google.dagger:dagger-compiler:2.48")
+    implementation(libs.dagger)
+    kapt(libs.dagger.compiler)
 
     //Serialization
     implementation(libs.kotlinx.serialization.json)
+
+    // Compose
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
 }

@@ -10,14 +10,17 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.chat_impl.presentation.ChatScreen
+import com.example.chat_impl.presentation.ChatViewModel
 import com.example.chat_list_impl.presentation.ChatListScreen
 import com.example.megachat.navigation.Routes
 import com.example.megachat.ui.UserDto
 import com.example.megachat.ui.theme.MegaChatTheme
+import dagger.Lazy
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -25,26 +28,16 @@ import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
+import javax.inject.Inject
 
 class MainActivity : ComponentActivity() {
 
-    private val userApi = Retrofit.Builder()
-        .baseUrl(UserApi.BASE_URL)
-        .addConverterFactory(MoshiConverterFactory.create())
-        .build()
-        .create<UserApi>()
-
-    private val _usersStateFlow = MutableStateFlow(emptyList<UserDto>())
-    val usersStateFlow = _usersStateFlow.asStateFlow()
+    @Inject
+    lateinit var chatViewModelFactoryFactory: Lazy<ChatViewModel.ChatViewModelFactory.Factory>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
-        lifecycleScope.launch {
-            val newUserList = userApi.getUsers()
-            _usersStateFlow.update { newUserList }
-        }
 
         setContent {
             MegaChatTheme {
@@ -65,34 +58,16 @@ class MainActivity : ComponentActivity() {
                         }
                         composable<Routes.ChatScreen> {
                             ChatScreen(
-                                padding = innerPadding
+                                padding = innerPadding,
+                                viewModel(
+                                    factory = chatViewModelFactoryFactory.get().create(
+                                        (application as MegaChatApplication).appComponent,
+                                        "FUCK_TOKEN"
+                                    )
+                                )
                             )
                         }
                     }
-
-                    val usersListState by usersStateFlow.collectAsState()
-
-/*
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(innerPadding)
-                    ) {
-                        usersListState.forEach { user ->
-                            Column(
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Spacer(modifier = Modifier.height(5.dp))
-                                Text(user.name)
-                                Spacer(modifier = Modifier.height(5.dp))
-                                Text(user.username)
-                                Spacer(modifier = Modifier.height(5.dp))
-                                Divider()
-                                Spacer(modifier = Modifier.height(3.dp))
-                            }
-                        }
-                    }
-*/
                 }
             }
         }

@@ -11,8 +11,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.serialization.SerializationException
 import okio.IOException
 import java.util.concurrent.TimeoutException
+import javax.inject.Inject
 
-class ChatSocketServiceDataSourceImpl(
+class ChatSocketServiceDataSourceImpl @Inject constructor(
     private val chatSocketService: ChatSocketService
 ): ChatSocketServiceDataSource {
     override suspend fun initConnection(authToken: String): Result<Unit, DataError.Network> =

@@ -1,5 +1,6 @@
 package com.example.chat_impl.di
 
+import com.example.chat_api.ChatApi
 import com.example.chat_impl.presentation.ChatViewModel
 import dagger.Component
 import javax.inject.Scope
@@ -9,7 +10,7 @@ import javax.inject.Scope
     dependencies = [ChatDepsProvider::class]
 )
 @ChatScope
-interface ChatComponent {
+interface ChatComponent: ChatApi {
 
     @Component.Factory
     interface Factory {

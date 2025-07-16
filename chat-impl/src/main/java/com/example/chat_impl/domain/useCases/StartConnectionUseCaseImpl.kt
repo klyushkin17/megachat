@@ -5,8 +5,9 @@ import com.example.chat_impl.presentation.errors.ChatUiErrors
 import com.example.chat_impl.presentation.model.MessageUi
 import com.example.core.network.Result
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class StartConnectionUseCaseImpl(
+class StartConnectionUseCaseImpl @Inject constructor(
     private val chatSocketServiceRepository: ChatSocketServiceRepository
 ): StartConnectionUseCase{
 

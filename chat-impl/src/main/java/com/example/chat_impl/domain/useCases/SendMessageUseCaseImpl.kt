@@ -4,8 +4,9 @@ import com.example.chat_impl.domain.repository.ChatSocketServiceRepository
 import com.example.chat_impl.presentation.errors.ChatUiErrors
 import com.example.chat_impl.presentation.model.MessageUi
 import com.example.core.network.Result
+import javax.inject.Inject
 
-class SendMessageUseCaseImpl(
+class SendMessageUseCaseImpl @Inject constructor(
     private val chatSocketServiceRepository: ChatSocketServiceRepository
 ): SendMessageUseCase {
 

@@ -7,8 +7,9 @@ import com.example.chat_impl.presentation.model.MessageUi
 import com.example.core.errors.DataError
 import com.example.core.network.Result
 import com.example.core.network.RootError
+import javax.inject.Inject
 
-class ChatServiceRepositoryImpl(
+class ChatServiceRepositoryImpl @Inject constructor(
     private val chatServiceDataSource: ChatServiceDataSource
 ): ChatServiceRepository {
 

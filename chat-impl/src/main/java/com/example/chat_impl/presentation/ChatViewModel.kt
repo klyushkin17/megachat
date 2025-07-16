@@ -2,13 +2,20 @@ package com.example.chat_impl.presentation
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.chat_impl.di.ChatDepsProvider
+import com.example.chat_impl.di.DaggerChatComponent
 import com.example.chat_impl.domain.useCases.GetMessagesUseCase
 import com.example.chat_impl.domain.useCases.SendMessageUseCase
 import com.example.chat_impl.domain.useCases.StartConnectionUseCase
 import com.example.chat_impl.domain.useCases.StopConnectionUseCase
 import com.example.chat_impl.presentation.errors.ChatUiErrors
+import com.example.core.factory.ViewModelFactoryFactory
 import com.example.core.network.Result
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -24,7 +31,9 @@ class ChatViewModel(
     private val getMessagesUC: GetMessagesUseCase,
     private val startConnectionUC: StartConnectionUseCase,
     private val stopConnectionUC: StopConnectionUseCase,
-    private val backgroundTaskDispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val backgroundTaskDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val chatDepsProvider: ChatDepsProvider,
+    private val authToken: String,
 ): ViewModel() {
 
     private val backgroundCoroutineContext = backgroundTaskDispatcher + SupervisorJob()
@@ -36,6 +45,7 @@ class ChatViewModel(
     val messageTextFieldState = _messageTextFieldState.asStateFlow()
 
     init {
+        initChatComponent()
         getMessages()
         startConnection()
     }
@@ -47,9 +57,16 @@ class ChatViewModel(
             is ChatActions.OnMessageChange -> onMessageChange(action.message)
         }
 
+    private fun initChatComponent() {
+        DaggerChatComponent
+            .factory()
+            .create(chatDepsProvider)
+            .injectIntoChatViewModel(this)
+    }
+
     private fun startConnection() {
         viewModelScope.launch(backgroundCoroutineContext) {
-            startConnectionUC("DUMMY_AUTH_KAY")
+            startConnectionUC(authToken)
                 .collect{ messageResult ->
                     when (messageResult) {
                         is Result.Success -> {
@@ -147,4 +164,39 @@ class ChatViewModel(
 
     private fun stopLoading() =
         _chatState.update { chatState.value.copy(isLoading = false) }
+
+    @Suppress("UNCHECKED_CAST")
+    class ChatViewModelFactory @AssistedInject constructor(
+        private val sendMessageUC: SendMessageUseCase,
+        private val getMessagesUC: GetMessagesUseCase,
+        private val startConnectionUC: StartConnectionUseCase,
+        private val stopConnectionUC: StopConnectionUseCase,
+        private val backgroundTaskDispatcher: CoroutineDispatcher = Dispatchers.IO,
+        @Assisted("chatDepsProvider")
+        private val chatDepsProvider: ChatDepsProvider,
+        @Assisted("authToken")
+        private val authToken: String,
+    ): ViewModelProvider.Factory {
+
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return ChatViewModel(
+                sendMessageUC,
+                getMessagesUC,
+                startConnectionUC,
+                stopConnectionUC,
+                backgroundTaskDispatcher,
+                chatDepsProvider,
+                authToken
+            ) as T
+        }
+
+        @AssistedFactory
+        interface Factory: ViewModelFactoryFactory {
+
+            fun create(
+                @Assisted("chatDepsProvider") chatDepsProvider: ChatDepsProvider,
+                @Assisted("authToken") authToken: String,
+            ): ChatViewModelFactory
+        }
+    }
 }

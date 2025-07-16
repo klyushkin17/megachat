@@ -7,8 +7,9 @@ import com.example.core.network.Result
 import kotlinx.serialization.SerializationException
 import okio.IOException
 import retrofit2.HttpException
+import javax.inject.Inject
 
-class ChatServiceDataSourceImpl(
+class ChatServiceDataSourceImpl @Inject constructor(
     private val chatService: ChatService
 ): ChatServiceDataSource {
     override suspend fun getAllMessages(): Result<List<Message>, DataError.Network> =

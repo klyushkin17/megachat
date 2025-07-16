@@ -104,6 +104,9 @@ dependencies {
     implementation(libs.ktor.serialization.kotlinx.json)
 
     // Dagger2
-    implementation("com.google.dagger:dagger:2.48")
-    kapt("com.google.dagger:dagger-compiler:2.48")
+    implementation(libs.dagger)
+    kapt(libs.dagger.compiler)
+
+    // Compose
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
 }

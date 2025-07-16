@@ -13,13 +13,25 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.chat_impl.di.ChatComponent
+import com.example.chat_impl.di.ChatDepsProvider
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
 
 @Composable
 fun ChatScreen(
     padding: PaddingValues,
-    chatViewModel: ChatViewModel,
+    chatDepsProvider: ChatDepsProvider,
+    authToken: String,
 ) {
+    val chatViewModel: ChatViewModel = viewModel(
+        factory = ChatComponent.init(chatDepsProvider).getChatViewModelFactoryFactory()
+            .create(
+                Dispatchers.IO,
+                authToken
+            )
+    )
+
     Column(
         modifier = Modifier.fillMaxSize().padding(padding)
     ) {

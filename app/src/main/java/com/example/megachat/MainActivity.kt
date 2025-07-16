@@ -32,9 +32,6 @@ import javax.inject.Inject
 
 class MainActivity : ComponentActivity() {
 
-    @Inject
-    lateinit var chatViewModelFactoryFactory: Lazy<ChatViewModel.ChatViewModelFactory.Factory>
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -59,12 +56,8 @@ class MainActivity : ComponentActivity() {
                         composable<Routes.ChatScreen> {
                             ChatScreen(
                                 padding = innerPadding,
-                                viewModel(
-                                    factory = chatViewModelFactoryFactory.get().create(
-                                        (application as MegaChatApplication).appComponent,
-                                        "FUCK_TOKEN"
-                                    )
-                                )
+                                chatDepsProvider = (application as MegaChatApplication).appComponent,
+                                "FUCK_TOKEN"
                             )
                         }
                     }

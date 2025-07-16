@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.chat_impl.di.ChatComponent
 import com.example.chat_impl.di.ChatDepsProvider
 import com.example.chat_impl.di.DaggerChatComponent
 import com.example.chat_impl.domain.useCases.GetMessagesUseCase
@@ -31,8 +32,7 @@ class ChatViewModel(
     private val getMessagesUC: GetMessagesUseCase,
     private val startConnectionUC: StartConnectionUseCase,
     private val stopConnectionUC: StopConnectionUseCase,
-    private val backgroundTaskDispatcher: CoroutineDispatcher = Dispatchers.IO,
-    private val chatDepsProvider: ChatDepsProvider,
+    private val backgroundTaskDispatcher: CoroutineDispatcher,
     private val authToken: String,
 ): ViewModel() {
 
@@ -45,7 +45,6 @@ class ChatViewModel(
     val messageTextFieldState = _messageTextFieldState.asStateFlow()
 
     init {
-        initChatComponent()
         getMessages()
         startConnection()
     }
@@ -56,13 +55,6 @@ class ChatViewModel(
             is ChatActions.OnMessageSend -> sendMessage(action.message)
             is ChatActions.OnMessageChange -> onMessageChange(action.message)
         }
-
-    private fun initChatComponent() {
-        DaggerChatComponent
-            .factory()
-            .create(chatDepsProvider)
-            .injectIntoChatViewModel(this)
-    }
 
     private fun startConnection() {
         viewModelScope.launch(backgroundCoroutineContext) {
@@ -171,7 +163,8 @@ class ChatViewModel(
         private val getMessagesUC: GetMessagesUseCase,
         private val startConnectionUC: StartConnectionUseCase,
         private val stopConnectionUC: StopConnectionUseCase,
-        private val backgroundTaskDispatcher: CoroutineDispatcher = Dispatchers.IO,
+        @Assisted("backgroundTaskDispatcher")
+        private val backgroundTaskDispatcher: CoroutineDispatcher,
         @Assisted("chatDepsProvider")
         private val chatDepsProvider: ChatDepsProvider,
         @Assisted("authToken")
@@ -185,7 +178,6 @@ class ChatViewModel(
                 startConnectionUC,
                 stopConnectionUC,
                 backgroundTaskDispatcher,
-                chatDepsProvider,
                 authToken
             ) as T
         }
@@ -194,7 +186,7 @@ class ChatViewModel(
         interface Factory: ViewModelFactoryFactory {
 
             fun create(
-                @Assisted("chatDepsProvider") chatDepsProvider: ChatDepsProvider,
+                @Assisted("backgroundTaskDispatcher") backgroundTaskDispatcher: CoroutineDispatcher,
                 @Assisted("authToken") authToken: String,
             ): ChatViewModelFactory
         }

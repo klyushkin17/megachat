@@ -10,7 +10,9 @@ import javax.inject.Scope
     dependencies = [ChatDepsProvider::class]
 )
 @ChatScope
-interface ChatComponent: ChatApi {
+interface ChatComponent {
+
+    fun getChatViewModelFactoryFactory(): ChatViewModel.ChatViewModelFactory.Factory
 
     @Component.Factory
     interface Factory {
@@ -35,8 +37,6 @@ interface ChatComponent: ChatApi {
             return requireNotNull(chatComponent)
         }
     }
-
-    fun injectIntoChatViewModel(chatViewModel: ChatViewModel)
 }
 
 @Scope

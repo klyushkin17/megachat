@@ -3,11 +3,14 @@ package com.example.chat_impl.di
 import com.example.chat_impl.data.dataSources.ChatServiceDataSource
 import com.example.chat_impl.data.dataSources.ChatServiceDataSourceImpl
 import com.example.chat_impl.data.dataSources.ChatSocketServiceDataSource
+import com.example.chat_impl.data.dataSources.ChatSocketServiceDataSourceImpl
 import com.example.chat_impl.data.remote.services.ChatService
 import com.example.chat_impl.data.remote.services.ChatSocketService
 import com.example.chat_impl.data.remote.services.ChatSocketServiceImpl
 import com.example.chat_impl.data.repository.ChatServiceRepositoryImpl
+import com.example.chat_impl.data.repository.ChatSocketServiceRepositoryImpl
 import com.example.chat_impl.domain.repository.ChatServiceRepository
+import com.example.chat_impl.domain.repository.ChatSocketServiceRepository
 import com.example.chat_impl.domain.useCases.GetMessagesUseCase
 import com.example.chat_impl.domain.useCases.GetMessagesUseCaseImpl
 import com.example.chat_impl.domain.useCases.SendMessageUseCase
@@ -64,13 +67,18 @@ interface BindingModule {
 
     @Binds
     fun bindsChatSocketServiceDataSource(
-        chatSocketServiceDataSourceImpl: ChatSocketServiceDataSource
+        chatSocketServiceDataSourceImpl: ChatSocketServiceDataSourceImpl
     ): ChatSocketServiceDataSource
 
     @Binds
     fun bindsChatServiceRepository(
         chatServiceRepositoryImpl: ChatServiceRepositoryImpl
     ): ChatServiceRepository
+
+    @Binds
+    fun bindsChatSocketServiceRepository(
+        chatSocketServiceRepositoryImpl: ChatSocketServiceRepositoryImpl
+    ): ChatSocketServiceRepository
 
     @Binds
     fun bindsGetMessagesUseCase(

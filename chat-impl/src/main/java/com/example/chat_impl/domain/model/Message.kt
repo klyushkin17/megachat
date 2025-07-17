@@ -3,10 +3,16 @@ package com.example.chat_impl.domain.model
 import com.example.chat_impl.presentation.model.MessageUi
 
 data class Message(
-    val text: String
+    val id: String,
+    val username: String,
+    val formattedTime: String,
+    val text: String,
 ) {
     fun toMessageUi(): MessageUi =
         MessageUi(
-            text = text
+            id = id,
+            username = username,
+            time = formattedTime,
+            text = text,
         )
 }

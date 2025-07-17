@@ -4,6 +4,7 @@ import com.example.chat_impl.data.dataSources.ChatServiceDataSource
 import com.example.chat_impl.domain.repository.ChatServiceRepository
 import com.example.chat_impl.presentation.errors.ChatUiErrors
 import com.example.chat_impl.presentation.model.MessageUi
+import com.example.chat_impl.test.getAllMessagesTestSuccess
 import com.example.core.errors.DataError
 import com.example.core.network.Result
 import com.example.core.network.RootError
@@ -14,7 +15,8 @@ class ChatServiceRepositoryImpl @Inject constructor(
 ): ChatServiceRepository {
 
     override suspend fun getAllMessages(): Result<List<MessageUi>, ChatUiErrors> {
-        val messagesResult = chatServiceDataSource.getAllMessages()
+        // val messagesResult = chatServiceDataSource.getAllMessages()
+        val messagesResult = getAllMessagesTestSuccess()
 
         return when(messagesResult) {
             is Result.Success -> {

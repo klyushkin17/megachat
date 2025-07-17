@@ -165,8 +165,6 @@ class ChatViewModel(
         private val stopConnectionUC: StopConnectionUseCase,
         @Assisted("backgroundTaskDispatcher")
         private val backgroundTaskDispatcher: CoroutineDispatcher,
-        @Assisted("chatDepsProvider")
-        private val chatDepsProvider: ChatDepsProvider,
         @Assisted("authToken")
         private val authToken: String,
     ): ViewModelProvider.Factory {

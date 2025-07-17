@@ -40,9 +40,7 @@ object RetrofitModule {
     fun provideChatService(
         chatServiceRetrofit: Retrofit
     ): ChatService {
-        return chatServiceRetrofit.newBuilder()
-            .baseUrl(BaseUrl.CHAT_BASE_URL.baseUrl)
-            .build()
+        return chatServiceRetrofit
             .create(ChatService::class.java)
     }
 }

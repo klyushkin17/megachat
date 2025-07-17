@@ -36,6 +36,7 @@ android {
 
 dependencies {
     implementation(project(":core-network-api"))
+    implementation(project(":core"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -56,7 +57,6 @@ dependencies {
     implementation(libs.ktor.client.serialization)
     implementation(libs.ktor.client.websockets)
     implementation(libs.ktor.client.logging)
-    implementation(libs.logback.classic)
     implementation(libs.ktor.client.content.negotiation)
     implementation(libs.ktor.serialization.kotlinx.json)
 

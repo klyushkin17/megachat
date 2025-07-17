@@ -28,7 +28,7 @@ interface ChatComponent {
         private var chatComponent: ChatComponent? = null
 
         fun init(chatDepsProvider: ChatDepsProvider): ChatComponent {
-            chatComponent?.let {
+            if (chatComponent == null) {
                 chatComponent = DaggerChatComponent
                     .factory()
                     .create(chatDepsProvider)

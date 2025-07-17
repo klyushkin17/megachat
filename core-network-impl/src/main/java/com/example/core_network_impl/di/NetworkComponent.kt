@@ -21,8 +21,7 @@ interface NetworkComponent: NetworkApi {
         private var networkComponent: NetworkComponent? = null
 
         fun init(): NetworkComponent {
-
-            networkComponent?.let {
+            if (networkComponent == null) {
                 networkComponent = DaggerNetworkComponent
                     .factory()
                     .create()

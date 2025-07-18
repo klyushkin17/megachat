@@ -1,4 +1,4 @@
-package com.example.chat_impl.presentation
+package com.example.chat_impl.presentation.chat
 
 import com.example.chat_impl.presentation.model.MessageUi
 

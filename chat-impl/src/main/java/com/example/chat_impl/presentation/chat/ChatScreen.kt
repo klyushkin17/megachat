@@ -1,4 +1,4 @@
-package com.example.chat_impl.presentation
+package com.example.chat_impl.presentation.chat
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -11,16 +11,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.chat_impl.di.ChatComponent
 import com.example.chat_impl.di.ChatDepsProvider
+import com.example.chat_impl.presentation.message.OwnMessage
 import kotlinx.coroutines.Dispatchers
-import javax.inject.Inject
 
 @Composable
 fun ChatScreen(
@@ -48,7 +46,10 @@ fun ChatScreen(
                 .fillMaxWidth()
         ) {
             items(chatState.value.messagesList) { message ->
-                Text(text = message.username)
+                OwnMessage(
+                    text = message.text,
+                    time = message.time,
+                )
                 Spacer(modifier = Modifier.height(10.dp))
             }
 

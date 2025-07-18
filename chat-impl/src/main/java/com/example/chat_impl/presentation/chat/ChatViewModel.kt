@@ -1,12 +1,9 @@
-package com.example.chat_impl.presentation
+package com.example.chat_impl.presentation.chat
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.chat_impl.di.ChatComponent
-import com.example.chat_impl.di.ChatDepsProvider
-import com.example.chat_impl.di.DaggerChatComponent
 import com.example.chat_impl.domain.useCases.GetMessagesUseCase
 import com.example.chat_impl.domain.useCases.SendMessageUseCase
 import com.example.chat_impl.domain.useCases.StartConnectionUseCase
@@ -18,7 +15,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

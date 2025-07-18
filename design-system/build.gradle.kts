@@ -1,12 +1,10 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.serialization)
-    id("kotlin-kapt")
 }
 
 android {
-    namespace = "com.example.chat_impl"
+    namespace = "com.example.design_system"
     compileSdk = 36
 
     defaultConfig {
@@ -43,9 +41,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":core"))
-    implementation(project(":chat-api"))
-    implementation(project(":design-system"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -62,27 +57,4 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-
-    // Retrofit
-    implementation (libs.retrofit)
-    implementation (libs.converter.moshi)
-    implementation (libs.okhttp)
-    implementation (libs.logging.interceptor)
-
-    // Ktor
-    implementation(libs.ktor.client.core)
-    implementation(libs.ktor.client.cio)
-    implementation(libs.ktor.client.serialization)
-    implementation(libs.ktor.client.websockets)
-    implementation(libs.ktor.client.logging)
-
-    // Dagger2
-    implementation(libs.dagger)
-    kapt(libs.dagger.compiler)
-
-    //Serialization
-    implementation(libs.kotlinx.serialization.json)
-
-    // Compose
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
 }

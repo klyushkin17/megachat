@@ -1,4 +1,4 @@
-package com.example.chat_impl.presentation
+package com.example.chat_impl.presentation.chat
 
 sealed interface ChatActions {
     data class OnMessageSend(val message: String): ChatActions

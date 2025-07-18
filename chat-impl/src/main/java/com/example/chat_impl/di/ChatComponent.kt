@@ -1,7 +1,6 @@
 package com.example.chat_impl.di
 
-import com.example.chat_api.ChatApi
-import com.example.chat_impl.presentation.ChatViewModel
+import com.example.chat_impl.presentation.chat.ChatViewModel
 import dagger.Component
 import javax.inject.Scope
 

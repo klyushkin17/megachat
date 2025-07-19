@@ -16,10 +16,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -36,6 +32,7 @@ import com.example.design_system.chatTheme.ChatColors
 fun OwnMessage(
     text: String,
     time: String,
+    isLast: Boolean,
     onMessageClick: (id: String) -> Unit = {},
     color: Color = ChatColors.defaultOwnMessageColor,
     cornerRadius: Dp = 10.dp,
@@ -45,36 +42,38 @@ fun OwnMessage(
     Row (
         modifier = Modifier
             .fillMaxWidth()
-            .drawBehind() {
-                val widthPx = size.width
-                val heightPx = size.height
+            .then(if(isLast) {
+                Modifier.drawBehind() {
+                    val widthPx = size.width
+                    val heightPx = size.height
 
-                val path = Path().apply {
+                    val path = Path().apply {
 
-                    // Извечный прямой правый нижний угол
-                    moveTo(widthPx - paddingFromRight.toPx(), heightPx * 0.5f)
-                    lineTo(widthPx - 70.dp.toPx(), heightPx)
-                    lineTo(widthPx - paddingFromRight.toPx(), heightPx)
-                    lineTo(widthPx - paddingFromRight.toPx(), heightPx * 0.5f)
+                        // Извечный прямой правый нижний угол
+                        moveTo(widthPx - paddingFromRight.toPx(), heightPx * 0.5f)
+                        lineTo(widthPx - 70.dp.toPx(), heightPx)
+                        lineTo(widthPx - paddingFromRight.toPx(), heightPx)
+                        lineTo(widthPx - paddingFromRight.toPx(), heightPx * 0.5f)
 
-                    // Сумасшедший хвост
-                    moveTo(widthPx - paddingFromRight.toPx(), heightPx * 0.5f)
-                    lineTo(widthPx - 70.dp.toPx(), heightPx)
-                    lineTo(widthPx - 2.dp.toPx(), heightPx)
+                        // Сумасшедший хвост
+                        moveTo(widthPx - paddingFromRight.toPx(), heightPx * 0.5f)
+                        lineTo(widthPx - 70.dp.toPx(), heightPx)
+                        lineTo(widthPx - 2.dp.toPx(), heightPx)
 
-                    quadraticTo(
-                        x1 = widthPx - 2.dp.toPx() - 20.dp.toPx(),
-                        y1 = heightPx - 5.dp.toPx(),
-                        x2 = widthPx - paddingFromRight.toPx(),
-                        y2 = heightPx - 15.dp.toPx() - 5.dp.toPx(),
+                        quadraticTo(
+                            x1 = widthPx - 2.dp.toPx() - 20.dp.toPx(),
+                            y1 = heightPx - 5.dp.toPx(),
+                            x2 = widthPx - paddingFromRight.toPx(),
+                            y2 = heightPx - 15.dp.toPx() - 5.dp.toPx(),
+                        )
+                    }
+                    drawPath(
+                        path = path,
+                        color = color,
+                        style = Fill
                     )
                 }
-                drawPath(
-                    path = path,
-                    color = color,
-                    style = Fill
-                )
-            }
+            } else Modifier )
             .padding(end = paddingFromRight)
     ) {
         Spacer(modifier = Modifier.weight(0.2f))
@@ -93,30 +92,22 @@ fun OwnMessage(
                     .padding(5.dp)
             ) {
                 FlowRow(
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    horizontalArrangement = Arrangement.End,
                 ) {
-                    var lineCount by remember { mutableIntStateOf(1) }
+                    Text(
+                        text = text,
+                        modifier = Modifier
+                            .wrapContentWidth(),
+                    )
 
                     Box(
-                    ) {
-                        Text(
-                            text = text,
-                            modifier = Modifier
-                                .wrapContentWidth(),
-                            onTextLayout = { textLayoutResult ->
-                                lineCount = textLayoutResult.lineCount
-                            }
-                        )
-                    }
-
-                    Row(
                         modifier = Modifier
-                            .then(if (lineCount > 1) Modifier.fillMaxWidth() else Modifier.wrapContentWidth()),
-                        horizontalArrangement = Arrangement.End
+                            .padding(
+                                start = 4.dp,
+                                top = 4.dp
+                            )
                     ) {
-                        Box(Modifier.padding(top = 4.dp)) {
-                            Text(text = time)
-                        }
+                        Text(text = time)
                     }
                 }
             }
@@ -131,6 +122,7 @@ fun OwnMessagePreview() {
         OwnMessage(
             "Got something for ya",
             "Jul 18, 2025",
+            false,
             onMessageClick = {},
         )
     }

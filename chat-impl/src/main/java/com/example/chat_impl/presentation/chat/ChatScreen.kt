@@ -49,6 +49,7 @@ fun ChatScreen(
                 OwnMessage(
                     text = message.text,
                     time = message.time,
+                    false
                 )
                 Spacer(modifier = Modifier.height(10.dp))
             }

@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.layout.ContentScale
@@ -21,7 +22,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.chat_impl.di.ChatComponent
 import com.example.chat_impl.di.ChatDepsProvider
+import com.example.chat_impl.presentation.message.OthersMessage
 import com.example.chat_impl.presentation.message.OwnMessage
+import com.example.chat_impl.utils.getRandomGigachadWallpaper
 import com.example.design_system.R
 import kotlinx.coroutines.Dispatchers
 
@@ -45,7 +48,7 @@ fun ChatScreen(
         modifier = Modifier
             .fillMaxSize()
             .paint(
-                painterResource(id = R.drawable.gigachad_wallpaper_1),
+                getRandomGigachadWallpaper(),
                 contentScale = ContentScale.Crop,
             )
     ) {
@@ -57,10 +60,10 @@ fun ChatScreen(
                     .fillMaxWidth()
             ) {
                 items(chatState.value.messagesList) { message ->
-                    OwnMessage(
+                    OthersMessage(
                         text = message.text,
                         time = message.time,
-                        true
+                        username = message.username,
                     )
                     Spacer(modifier = Modifier.height(10.dp))
                 }

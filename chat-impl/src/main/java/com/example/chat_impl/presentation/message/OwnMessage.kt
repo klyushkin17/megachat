@@ -36,14 +36,14 @@ fun OwnMessage(
     text: String,
     time: String,
     isLast: Boolean,
-    onMessageClick: () -> Unit = {},
     messageTextColor: Color = MaterialTheme.colorScheme.onSurface,
     timeTextColor: Color = MaterialTheme.colorScheme.onBackground,
-    backgroundColor: Color = MaterialTheme.colorScheme.primary,
+backgroundColor: Color = MaterialTheme.colorScheme.primary,
     messageBodyTextStyle: TextStyle = MaterialTheme.typography.bodyMedium,
     timeTextStyle: TextStyle = MaterialTheme.typography.labelSmall,
     cornerRoundShape: CornerBasedShape = MaterialTheme.shapes.small,
     paddingFromRight: Dp = 12.dp,
+    onMessageClick: () -> Unit = {},
     // Придумать, какие значения передавать для динамичкского кубического безэ
 ) {
     Row (

@@ -7,15 +7,17 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 
 val LightColorPalette = lightColorScheme(
-    primary = purple,
-    onSurface = blackText,
-    onBackground = grayText,
+    primary = Purple,
+    secondary = DarkGray,
+    onSurface = BlackText,
+    onBackground = GrayText,
 )
 
 val DarkColorPalette = darkColorScheme(
-    primary = purple,
-    onSurface = whiteText,
-    onBackground = grayText,
+    primary = Purple,
+    secondary = DarkGray,
+    onSurface = WhiteText,
+    onBackground = GrayText,
 )
 
 @Composable

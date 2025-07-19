@@ -12,6 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.chat_impl.presentation.chat.ChatScreen
 import com.example.chat_list_impl.presentation.ChatListScreen
+import com.example.design_system.theme.BaseAppTheme
 import com.example.megachat.navigation.Routes
 import com.example.megachat.ui.theme.MegaChatTheme
 
@@ -22,7 +23,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            MegaChatTheme {
+            BaseAppTheme {
+
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     val navController = rememberNavController()
 

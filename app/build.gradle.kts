@@ -64,6 +64,7 @@ dependencies {
     implementation(project(":chat-list-impl"))
     implementation(project(":registration-api"))
     implementation(project(":registration-impl"))
+    implementation(project(":design-system"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

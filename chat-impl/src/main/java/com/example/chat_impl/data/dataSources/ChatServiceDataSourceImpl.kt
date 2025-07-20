@@ -4,9 +4,11 @@ import com.example.chat_impl.data.remote.services.ChatService
 import com.example.chat_impl.domain.model.Message
 import com.example.core.errors.DataError
 import com.example.core.network.Result
+import io.ktor.utils.io.CancellationException
 import kotlinx.serialization.SerializationException
 import okio.IOException
 import retrofit2.HttpException
+import java.lang.Exception
 import javax.inject.Inject
 
 class ChatServiceDataSourceImpl @Inject constructor(
@@ -28,5 +30,9 @@ class ChatServiceDataSourceImpl @Inject constructor(
             Result.Error(DataError.Network.NO_INTERNET)
         } catch (e: SerializationException) {
             Result.Error(DataError.Network.SERIALIZATION)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            Result.Error(DataError.Network.UNKNOWN)
         }
 }

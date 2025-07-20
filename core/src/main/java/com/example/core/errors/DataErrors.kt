@@ -18,6 +18,9 @@ sealed interface DataError: RootError {
         WEBSOCKET_SESSION_CLOSED
     }
     enum class Local: DataError {
-        DISK_FULL
+        DISK_FULL,
+        DATA_NOT_FOUND,
+        IO_ERROR,
+        UNKNOWN
     }
 }

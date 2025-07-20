@@ -12,6 +12,7 @@ import kotlinx.serialization.SerializationException
 import okio.IOException
 import java.util.concurrent.TimeoutException
 import javax.inject.Inject
+import kotlin.coroutines.cancellation.CancellationException
 
 class ChatSocketServiceDataSourceImpl @Inject constructor(
     private val chatSocketService: ChatSocketService
@@ -32,6 +33,8 @@ class ChatSocketServiceDataSourceImpl @Inject constructor(
                 }
                 else -> Result.Error(DataError.Network.SERVER_ERROR)
             }
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             Result.Error(DataError.Network.UNKNOWN)
         }
@@ -53,6 +56,8 @@ class ChatSocketServiceDataSourceImpl @Inject constructor(
             }
         } catch (e: SerializationException) {
             Result.Error(DataError.Network.SERIALIZATION)
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             Result.Error(DataError.Network.UNKNOWN)
         }
@@ -75,6 +80,7 @@ class ChatSocketServiceDataSourceImpl @Inject constructor(
                             }
                         }
                         is SerializationException -> Result.Error(DataError.Network.SERIALIZATION)
+                        is CancellationException -> throw e
                         else -> Result.Error(DataError.Network.UNKNOWN)
                     }
                 )

@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.paint
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.chat_impl.di.ChatComponent
 import com.example.chat_impl.di.ChatDepsProvider
@@ -42,7 +43,7 @@ fun ChatScreen(
             )
     )
 
-    val chatState = chatViewModel.chatState.collectAsState()
+    val chatState = chatViewModel.chatState.collectAsStateWithLifecycle()
 
     Box(
         modifier = Modifier

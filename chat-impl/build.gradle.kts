@@ -46,6 +46,7 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":chat-api"))
     implementation(project(":design-system"))
+    implementation(project(":datastore"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -85,4 +86,7 @@ dependencies {
 
     // Compose
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+
+    // DataStore
+    implementation(libs.androidx.datastore.preferences)
 }

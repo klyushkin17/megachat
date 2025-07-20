@@ -7,6 +7,7 @@ import java.util.Date
 
 data class MessageDto(
     @field:Json(name = "id") val id: String,
+    @field:Json(name = "userId") val userId: String,
     @field:Json(name = "username") val username: String,
     @field:Json(name = "timestamp") val timestamp: Long,
     @field:Json(name = "text") val text: String
@@ -19,6 +20,7 @@ data class MessageDto(
 
         return Message(
             id = id,
+            userId = userId,
             username = username,
             formattedTime = formattedTime,
             text = text

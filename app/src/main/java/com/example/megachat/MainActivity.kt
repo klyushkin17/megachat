@@ -1,5 +1,6 @@
 package com.example.megachat
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -23,7 +24,6 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             BaseAppTheme {
-
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     val navController = rememberNavController()
 
@@ -43,7 +43,8 @@ class MainActivity : ComponentActivity() {
                             ChatScreen(
                                 padding = innerPadding,
                                 chatDepsProvider = (application as MegaChatApplication).appComponent,
-                                "FUCK_TOKEN"
+                                "FUCK_TOKEN",
+                                application as Context,
                             )
                         }
                     }

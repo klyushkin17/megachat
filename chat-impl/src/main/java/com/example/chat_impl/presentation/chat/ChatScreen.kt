@@ -1,5 +1,6 @@
 package com.example.chat_impl.presentation.chat
 
+import android.content.Context
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -34,12 +36,14 @@ fun ChatScreen(
     padding: PaddingValues,
     chatDepsProvider: ChatDepsProvider,
     authToken: String,
+    context: Context
 ) {
     val chatViewModel: ChatViewModel = viewModel(
         factory = ChatComponent.init(chatDepsProvider).getChatViewModelFactoryFactory()
             .create(
                 Dispatchers.IO,
-                authToken
+                authToken,
+                context,
             )
     )
 

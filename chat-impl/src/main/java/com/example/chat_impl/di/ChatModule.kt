@@ -4,13 +4,19 @@ import com.example.chat_impl.data.dataSources.ChatServiceDataSource
 import com.example.chat_impl.data.dataSources.ChatServiceDataSourceImpl
 import com.example.chat_impl.data.dataSources.ChatSocketServiceDataSource
 import com.example.chat_impl.data.dataSources.ChatSocketServiceDataSourceImpl
+import com.example.chat_impl.data.dataSources.UserDataSource
+import com.example.chat_impl.data.dataSources.UserDataSourceImp
+import com.example.chat_impl.data.local.dataStore.UserDataStore
+import com.example.chat_impl.data.local.dataStore.UserDataStoreImpl
 import com.example.chat_impl.data.remote.services.ChatService
 import com.example.chat_impl.data.remote.services.ChatSocketService
 import com.example.chat_impl.data.remote.services.ChatSocketServiceImpl
 import com.example.chat_impl.data.repository.ChatServiceRepositoryImpl
 import com.example.chat_impl.data.repository.ChatSocketServiceRepositoryImpl
+import com.example.chat_impl.data.repository.UserRepositoryImpl
 import com.example.chat_impl.domain.repository.ChatServiceRepository
 import com.example.chat_impl.domain.repository.ChatSocketServiceRepository
+import com.example.chat_impl.domain.repository.UserRepository
 import com.example.chat_impl.domain.useCases.GetMessagesUseCase
 import com.example.chat_impl.domain.useCases.GetMessagesUseCaseImpl
 import com.example.chat_impl.domain.useCases.SendMessageUseCase
@@ -57,6 +63,21 @@ interface BindingModule {
     fun bindsChatSocketService(
         chatSocketServiceImpl: ChatSocketServiceImpl
     ): ChatSocketService
+
+    @Binds
+    fun bindsUserDataStore(
+        userDataStoreImpl: UserDataStoreImpl
+    ): UserDataStore
+
+    @Binds
+    fun bindsUserDataSource(
+        userDataSourceImpl: UserDataSourceImp
+    ): UserDataSource
+
+    @Binds
+    fun bindsUserRepository(
+        userRepositoryImpl: UserRepositoryImpl
+    ): UserRepository
 
     @Binds
     fun bindsChatServiceDataSource(

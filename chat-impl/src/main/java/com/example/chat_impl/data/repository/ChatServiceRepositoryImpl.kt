@@ -1,6 +1,7 @@
 package com.example.chat_impl.data.repository
 
 import com.example.chat_impl.data.dataSources.ChatServiceDataSource
+import com.example.chat_impl.domain.model.Message
 import com.example.chat_impl.domain.repository.ChatServiceRepository
 import com.example.chat_impl.presentation.errors.ChatUiErrors
 import com.example.chat_impl.presentation.model.MessageUi
@@ -14,13 +15,13 @@ class ChatServiceRepositoryImpl @Inject constructor(
     private val chatServiceDataSource: ChatServiceDataSource
 ): ChatServiceRepository {
 
-    override suspend fun getAllMessages(): Result<List<MessageUi>, ChatUiErrors> {
+    override suspend fun getAllMessages(): Result<List<Message>, ChatUiErrors> {
         // val messagesResult = chatServiceDataSource.getAllMessages()
         val messagesResult = getAllMessagesTestSuccess()
 
         return when(messagesResult) {
             is Result.Success -> {
-                val messagesUiList = messagesResult.data.map { it.toMessageUi() }
+                val messagesUiList = messagesResult.data
                 Result.Success(messagesUiList)
             }
             is Result.Error -> {

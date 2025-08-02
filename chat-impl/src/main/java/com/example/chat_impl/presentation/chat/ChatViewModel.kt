@@ -1,5 +1,6 @@
 package com.example.chat_impl.presentation.chat
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -30,6 +31,7 @@ class ChatViewModel(
     private val stopConnectionUC: StopConnectionUseCase,
     private val backgroundTaskDispatcher: CoroutineDispatcher,
     private val authToken: String,
+    private val context: Context,
 ): ViewModel() {
 
     private val backgroundCoroutineContext = backgroundTaskDispatcher + SupervisorJob()
@@ -110,7 +112,7 @@ class ChatViewModel(
         viewModelScope.launch {
             startLoading()
 
-            val messagesListResult = getMessagesUC()
+            val messagesListResult = getMessagesUC(context)
 
             when(messagesListResult) {
                 is Result.Success -> {
@@ -140,6 +142,9 @@ class ChatViewModel(
             ChatUiErrors.SEND_MESSAGE_ERROR -> _chatState.update {
                 chatState.value.copy(error = ChatError.SendMessageError)
             }
+            ChatUiErrors.AUTH_ERROR -> _chatState.update {
+                chatState.value.copy(error = ChatError.AuthError)
+            }
         }
     }
 
@@ -163,6 +168,8 @@ class ChatViewModel(
         private val backgroundTaskDispatcher: CoroutineDispatcher,
         @Assisted("authToken")
         private val authToken: String,
+        @Assisted("context")
+        private val context: Context,
     ): ViewModelProvider.Factory {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -172,7 +179,8 @@ class ChatViewModel(
                 startConnectionUC,
                 stopConnectionUC,
                 backgroundTaskDispatcher,
-                authToken
+                authToken,
+                context
             ) as T
         }
 
@@ -182,6 +190,7 @@ class ChatViewModel(
             fun create(
                 @Assisted("backgroundTaskDispatcher") backgroundTaskDispatcher: CoroutineDispatcher,
                 @Assisted("authToken") authToken: String,
+                @Assisted("context") context: Context,
             ): ChatViewModelFactory
         }
     }

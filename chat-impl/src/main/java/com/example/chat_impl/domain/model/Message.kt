@@ -9,12 +9,15 @@ data class Message(
     val formattedTime: String,
     val text: String,
 ) {
-    fun toMessageUi(): MessageUi =
+    fun toMessageUi(
+        ownUserId: String,
+    ): MessageUi =
         MessageUi(
             id = id,
             userId = userId,
             username = username,
             time = formattedTime,
             text = text,
+            isOwn = userId == ownUserId,
         )
 }

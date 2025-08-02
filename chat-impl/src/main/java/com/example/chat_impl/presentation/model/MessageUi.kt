@@ -7,7 +7,8 @@ data class MessageUi(
     val userId: String,
     val username: String,
     val time: String,
-    val text: String
+    val text: String,
+    val isOwn: Boolean = false,
 ) {
     fun toMessage() =
         Message(

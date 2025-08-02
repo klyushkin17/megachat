@@ -12,5 +12,6 @@ sealed interface ChatError {
     data object NoInternetConnection: ChatError
     data object SendMessageError: ChatError
     data object UnknownError: ChatError
+    data object AuthError: ChatError
     data object None: ChatError
 }
